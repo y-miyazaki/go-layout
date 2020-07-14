@@ -9,6 +9,7 @@ on:
     paths:
       - ".github/workflows/**"
       - "cmd/**"
+      - "internal/**"
       - "pkg/**"
 jobs:
   check:
