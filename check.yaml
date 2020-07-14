@@ -5,9 +5,13 @@
 # - SLACK_CHANNEL_ID
 name: Check Application
 on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - "cmd/**"
+      - "internal/**"
+      - "pkg/**"
   push:
-    branches:
-      - feature/**
     paths:
       - ".github/workflows/**"
       - "cmd/**"
