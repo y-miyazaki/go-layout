@@ -3,15 +3,15 @@
 # - SSH_PRIVATE_KEY
 # - SLACK_WEBHOOK
 # - SLACK_CHANNEL_ID
-name: Check Application
+name: Check
 on:
-  pull_request:
-    paths:
-      - ".github/workflows/**"
-      - "cmd/**"
-      - "internal/**"
-      - "pkg/**"
   push:
+    branches:
+      - feature/**
+      - develop
+      - release/**
+      - hotfix/**
+      - master
     paths:
       - ".github/workflows/**"
       - "cmd/**"
@@ -24,39 +24,24 @@ jobs:
     steps:
       - name: "code: check out code"
         uses: actions/checkout@v2
-      - name: "parameters: set parameters"
-        id: parameters
-        run: |
-          # PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-          # echo "::set-output name=pr_number::${PR_NUMBER}"
-      - name: "go: test"
+      - name: "setup"
         run: |
           echo $SSH_PRIVATE_KEY >> ./id_rsa
           chmod +x scripts/*
+      - name: "go: docker pull ymiyazakixyz/golang-test"
+        run: |
           docker pull ymiyazakixyz/golang-test:latest
+      - name: "go: test"
+        run: |
           docker run --rm -v $PWD:/go/src/github.com/y-miyazaki/go-layout -v $PWD/id_rsa:/root/.ssh/id_rsa -w /go/src/github.com/y-miyazaki/go-layout --name golang-test ymiyazakixyz/golang-test:latest ./scripts/go-test.sh
-          rm ./id_rsa
       - name: "go: upload coverage"
         uses: actions/upload-artifact@master
         with:
           name: coverage
           path: coverage
       - name: "go: golangci-lint for lint"
-        uses: reviewdog/action-golangci-lint@v1
-        with:
-          golangci_lint_flags: "--config golangci.yaml"
-          level: error
-          fail_on_error: true
-      - name: "shell: shellcheck for lint"
-        uses: reviewdog/action-shellcheck@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review # Change reporter.
-          path: "./scripts" # Optional.
-          pattern: "*" # Optional.
-          exclude: "./scripts/files/*" # Optional.
-          fail_on_error: true
-          shellcheck_flags: "-e SC2002,SC2126,SC2140"
+        run: |
+          docker run --rm -v $PWD:/go/src/github.com/y-miyazaki/go-layout -w /go/src/github.com/y-miyazaki/go-layout --name golang-test ymiyazakixyz/golang-test:latest golangci-lint run --tests=false --issues-exit-code 1 -c golangci.yaml ./...
       - name: "slack: notification for failed build."
         if: failure()
         uses: rtCamp/action-slack-notify@v2.0.2
