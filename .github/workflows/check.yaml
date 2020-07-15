@@ -42,6 +42,10 @@ jobs:
       - name: "go: golangci-lint for lint"
         run: |
           docker run --rm -v $PWD:/go/src/github.com/y-miyazaki/go-layout -w /go/src/github.com/y-miyazaki/go-layout --name golang-test ymiyazakixyz/golang-test:latest golangci-lint run --tests=false --issues-exit-code 1 -c golangci.yaml ./...
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        env:
+          SHELLCHECK_OPTS: -e SC2002,SC2126,SC2140
       - name: "slack: notification for failed build."
         if: failure()
         uses: rtCamp/action-slack-notify@v2.0.2

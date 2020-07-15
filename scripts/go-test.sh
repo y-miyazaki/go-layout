@@ -12,7 +12,7 @@ go mod download
 
 # go test
 cd "${SCRIPT_DIR}"/..
-if [ ! -e "${PWD}/coverage" ]; then
+if [ ! -d "${PWD}/coverage" ]; then
     mkdir -p coverage
 fi
 go test "$(go list ./... | grep -v /vendor/)" -coverprofile=coverage/coverage.out

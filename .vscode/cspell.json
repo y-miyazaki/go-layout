@@ -57,6 +57,7 @@
     "kubernetes",
     "logrus",
     "logutils",
+    "ludeeus",
     "miyazaki",
     "multiline",
     "nakedret",
