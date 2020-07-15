@@ -10,4 +10,5 @@ git config --global url."git@${GIT_DOMAIN}:".insteadOf "https://${GIT_DOMAIN}/"
 # go mod download
 go mod download
 
-/usr/local/bin/gocheck -t
+go test "$(go list ./... | grep -v /vendor/)" -coverprofile=coverage/coverage.out
+go tool cover -html=coverage/coverage.out -o coverage/coverage.html
