@@ -1,5 +1,5 @@
 #!/bin/bash
-ROOT_DIR=$PWD
+SCRIPT_DIR=$(cd $(dirname $0); pwd)
 GIT_DOMAIN=github.com
 
 # set ssh and git config
@@ -11,9 +11,10 @@ git config --global url."git@${GIT_DOMAIN}:".insteadOf "https://${GIT_DOMAIN}/"
 go mod download
 
 # build all commands.
-for file in `find "${PWD}"/cmd -name "main.go" -type f`; do
+cd "${SCRIPT_DIR}"/..
+for file in `find "cmd -name "main.go" -type f`; do
     dir=`dirname "${file}"`
     basename=`basename "${dir}"`
     cd "${dir}"
-    go build -o "${ROOT_DIR}"/cmd/"${basename}"
+    go build -o "cmd/"${basename}"
 done
