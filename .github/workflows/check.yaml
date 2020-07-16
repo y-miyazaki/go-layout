@@ -22,6 +22,11 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
+      - name: "parameters: set parameters"
+        id: parameters
+        run: |
+          echo "::set-output name=go_directory::/go/src/github.com/y-miyazaki/go-layout"
+          echo "::set-output name=scripts::./scripts/*.sh"
       - name: "code: check out code"
         uses: actions/checkout@v2
       - name: "setup"
@@ -33,7 +38,7 @@ jobs:
           docker pull ymiyazakixyz/golang-test:latest
       - name: "go: test"
         run: |
-          docker run --rm -v $PWD:/go/src/github.com/y-miyazaki/go-layout -v $PWD/id_rsa:/root/.ssh/id_rsa -w /go/src/github.com/y-miyazaki/go-layout --name golang-test ymiyazakixyz/golang-test:latest ./scripts/go-test.sh
+          docker run --rm -v $PWD:${{ steps.parameters.outputs.go_directory }} -v $PWD/id_rsa:/root/.ssh/id_rsa -w ${{ steps.parameters.outputs.go_directory }} --name golang-test ymiyazakixyz/golang-test:latest ./scripts/go-test.sh
       - name: "go: upload coverage"
         uses: actions/upload-artifact@master
         with:
@@ -41,7 +46,7 @@ jobs:
           path: coverage
       - name: "go: golangci-lint for lint"
         run: |
-          docker run --rm -v $PWD:/go/src/github.com/y-miyazaki/go-layout -w /go/src/github.com/y-miyazaki/go-layout --name golang-test ymiyazakixyz/golang-test:latest golangci-lint run --tests=false --issues-exit-code 1 -c golangci.yaml ./...
+          docker run --rm -v $PWD:${{ steps.parameters.outputs.go_directory }} -w ${{ steps.parameters.outputs.go_directory }} --name golang-test ymiyazakixyz/golang-test:latest golangci-lint run --tests=false --issues-exit-code 1 -c golangci.yaml ./...
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
         env:
