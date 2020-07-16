@@ -50,7 +50,7 @@ jobs:
           pattern: "*" # Optional.
           exclude: "./scripts/files/*" # Optional.
           fail_on_error: true
-          shellcheck_flags: "-e SC2002,SC2126,SC2140"
+          shellcheck_flags: "-e SC2002,SC2126,SC2028,SC2140,SC2044"
       - name: "slack: notification for failed build."
         if: failure()
         uses: rtCamp/action-slack-notify@v2.0.2

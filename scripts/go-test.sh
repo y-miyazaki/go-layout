@@ -1,5 +1,5 @@
 #!/bin/bash
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
+SCRIPT_DIR=$(cd "$(dirname "$0")" || exit; pwd)
 GIT_DOMAIN=github.com
 
 # set ssh and git config
@@ -11,7 +11,7 @@ git config --global url."git@${GIT_DOMAIN}:".insteadOf "https://${GIT_DOMAIN}/"
 go mod download
 
 # go test
-cd "${SCRIPT_DIR}"/..
+cd "${SCRIPT_DIR}"/.. || exit
 if [ ! -d "${PWD}/coverage" ]; then
     mkdir -p coverage
 fi

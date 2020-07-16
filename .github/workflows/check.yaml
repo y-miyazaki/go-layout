@@ -45,7 +45,7 @@ jobs:
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
         env:
-          SHELLCHECK_OPTS: -e SC2002,SC2126,SC2140
+          SHELLCHECK_OPTS: -e SC2002,SC2126,SC2028,SC2140,SC2044
       - name: "slack: notification for failed build."
         if: failure()
         uses: rtCamp/action-slack-notify@v2.0.2

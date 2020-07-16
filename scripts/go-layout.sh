@@ -1,8 +1,7 @@
 #!/bin/bash
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
-
-cd ${SCRIPT_DIR}/..
+SCRIPT_DIR=$(cd "$(dirname "$0")" || exit; pwd)
+cd "${SCRIPT_DIR}"/.. || exit
 # setting VSCODE
 mkdir -p .vscode
 curl -sSfL -o .vscode/cspell.json https://raw.githubusercontent.com/y-miyazaki/config/master/.vscode/cspell.json
