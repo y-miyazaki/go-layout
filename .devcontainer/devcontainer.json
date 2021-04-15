@@ -1,8 +1,5 @@
 {
-  "image": "registry.hub.docker.com/ymiyazakixyz/golang-local:1.14.4-alpine",
-  "settings": {
-    "terminal.integrated.shell.linux": "/bin/bash"
-  },
+  "image": "registry.hub.docker.com/ymiyazakixyz/golang-local:1.14.6-alpine",
   "extensions": [
     "golang.go",
     "ms-azuretools.vscode-docker",
